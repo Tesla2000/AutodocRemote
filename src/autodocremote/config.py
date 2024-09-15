@@ -5,6 +5,7 @@ from typing import Type
 
 from dotenv import load_dotenv
 from pydantic import BaseModel
+from pydantic import Field
 
 from .custom_argument_parser import CustomArgumentParser
 
@@ -13,9 +14,9 @@ load_dotenv()
 
 class Config(BaseModel):
     _root: Path = Path(__file__).parent
+    filenames: list[str] = Field(default_factory=list)
     tab_length: int = 4
     line_length: int = 79
-    hf_home: Path = Path("models")
     llm: str = "gpt-4o-mini"
     max_new_tokens: int = 100
     summary_prompt: str = (
