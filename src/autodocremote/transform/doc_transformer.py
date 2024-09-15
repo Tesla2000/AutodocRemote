@@ -10,10 +10,9 @@ from libcst import Module
 from libcst import SimpleStatementLine
 from libcst import SimpleString
 
+from ..config import Config
 from ..document.docstring_generator import DocstringGenerator
 from .transformer import Transformer
-
-from ..config import Config
 
 
 class DocTransformer(Transformer):

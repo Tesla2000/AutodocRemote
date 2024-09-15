@@ -28,7 +28,9 @@ def generate_descriptions(
                         parameter=parameter, code=code.strip()
                     )
                 )
-            ).choices[0]["message"]["content"].lstrip()
+            )
+            .choices[0]["message"]["content"]
+            .lstrip()
             for parameter in parameters
         ),
         return_value,
