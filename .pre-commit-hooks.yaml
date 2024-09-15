@@ -1,5 +1,5 @@
--   id: autodoc
-    name: autodoc
+-   id: autodocremote
+    name: autodocremote
     description: This hook automatically documents python functions and methods with docstrings.
     entry: autodocremote
     language: python
