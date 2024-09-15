@@ -11,7 +11,28 @@ additional_documents_header = """Additional Documentation
 
 
 def add_markdowns():
+    """
+    The `add_markdowns` function updates reStructuredText (.rst) files in the
+    "docs/source" directory by appending a list of relative paths to Markdown
+    (.md) files found in corresponding subdirectories, excluding specific files
+    like "index.rst" and "modules.rst." It constructs the additional
+    documentation section by reading the existing content, formatting the new
+    paths, and writing the updated content back to the original .rst files.
+    :return: A string representing the relative path of a markdown file without
+    its suffix.
+    """
+
     def _conv2ref(markdown_file_path: Path) -> str:
+        """
+        The function `_conv2ref` takes a file path to a Markdown file and
+        returns its relative path to a specified source directory, removing the
+        file extension. It converts the input `Path` object to a string format,
+        ensuring that the resulting path does not include the suffix.
+        :param markdown_file_path: A Path object representing the location of a
+        markdown file, used to generate a relative reference string without its
+        file extension.
+        :return: A relative path string without the file extension.
+        """
         return str(markdown_file_path.relative_to(source_path).with_suffix(""))
 
     source_path = Path("docs/source")

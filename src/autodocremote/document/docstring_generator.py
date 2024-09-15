@@ -20,10 +20,33 @@ class DocstringGenerator:
     doc: str
 
     def __init__(self, original_node: FunctionDef, config: Config):
+        """
+        The `__init__` function initializes an instance by accepting an
+        `original_node` of type `FunctionDef` and a `config` of type `Config`,
+        storing them as instance attributes for further use.
+        :param original_node: A representation of the original function
+        definition being processed or modified.
+        :param config: An instance of the Config class that contains
+        configuration settings used to initialize the function.
+        :return: An instance of the class initialized with the given function
+        definition and configuration.
+        """
         self.config = config
         self.original_node = original_node
 
     def is_valid(self, indentation_level: int) -> bool:
+        """
+        The `is_valid` function checks the validity of a docstring by comparing
+        the expected parameters of a function against those documented within
+        the docstring, considering indentation and configuration settings. It
+        returns `True` if there are missing parameters or if the docstring is
+        absent, and `False` otherwise.
+        :param indentation_level: Specifies the level of indentation for
+        formatting the parameters in the function's docstring, influencing how
+        the parameters are represented in the output.
+        :return: Returns `True` if there are missing parameters or if the
+        docstring is absent; otherwise, returns `False`.
+        """
         self.expected_parameters = set(
             param.name.value for param in self.original_node.params.params
         ) - {"self"}
@@ -52,6 +75,15 @@ class DocstringGenerator:
         return True
 
     def generate(self) -> str:
+        """
+        The `generate` function creates a formatted docstring by extracting and
+        processing a summary, parameters, and result descriptions from a code
+        module, while handling missing parameters and applying line length and
+        indentation configurations. It returns the constructed docstring as a
+        formatted string.
+        :return: A formatted docstring containing a summary, parameters, and
+        result.
+        """
         code = Module(body=[self.original_node]).code
         summary, parameters, result = generate_descriptions(
             code, self.missing_parameters, self.config

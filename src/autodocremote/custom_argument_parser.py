@@ -11,6 +11,14 @@ class CustomArgumentParser(argparse.ArgumentParser):
         *args,
         **kwargs,
     ):
+        """
+        The `add_argument` function modifies the behavior of adding
+        command-line arguments by adjusting the `type` and `nargs` parameters
+        based on the specified type, specifically handling boolean, list, and
+        tuple types. It then calls the superclass's `add_argument` method to
+        finalize the argument addition.
+        :return: A modified argument configuration for command-line parsing.
+        """
         if isinstance(kwargs.get("type"), GenericAlias):
             kwargs["type"] = kwargs.get("type").__origin__
         if isinstance(kwargs.get("type"), type):
@@ -28,6 +36,17 @@ class CustomArgumentParser(argparse.ArgumentParser):
         )
 
     def _str2bool(self, v: Any) -> Any:
+        """
+        The `_str2bool` function converts various string representations of
+        boolean values (such as "yes", "no", "true", "false") into their
+        corresponding boolean types, while also accepting actual boolean
+        inputs. If the input does not match any expected values, it raises an
+        `ArgumentTypeError`.
+        :param v: This parameter represents a value that can be interpreted as
+        a boolean, accepting various string representations of true and false,
+        or a direct boolean input.
+        :return: A boolean value derived from the input string.
+        """
         if isinstance(v, bool):
             return v
         if v.lower() in ("yes", "true", "t", "y", "1"):
