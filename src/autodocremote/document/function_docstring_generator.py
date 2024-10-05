@@ -12,7 +12,7 @@ from .generate_descriptions import generate_descriptions
 from .split_lines import split_lines
 
 
-class DocstringGenerator:
+class FunctionDocstringGenerator:
     actual_parameters: dict[str, str]
     missing_parameters: Sequence[str]
     indentation_length: int
@@ -74,7 +74,7 @@ class DocstringGenerator:
             return False
         return True
 
-    def generate(self) -> str:
+    def generate(self, class_code: str = "") -> str:
         """
         The `generate` function creates a formatted docstring by extracting and
         processing a summary, parameters, and result descriptions from a code
@@ -86,7 +86,7 @@ class DocstringGenerator:
         """
         code = Module(body=[self.original_node]).code
         summary, parameters, result = generate_descriptions(
-            code, self.missing_parameters, self.config
+            code, self.missing_parameters, self.config, class_code
         )
         parameters, result = conv2docstring_lines(
             parameters, result, self.missing_parameters

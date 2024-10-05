@@ -19,19 +19,22 @@ class Config(BaseModel):
     line_length: int = 79
     llm: str = "gpt-4o-mini"
     max_new_tokens: int = 100
+    formatted_output_prompt: str = (
+        "Write a docstring of the function.\nFunction:\n\n{code}"
+    )
     summary_prompt: str = (
-        "Write a short description of the function bellow.\nFunction:\n\n"
+        "Write a short description of the function.\nFunction:\n\n"
         "{code}\n\nThe description should be up to 2 sentences long "
         "with one sentence description being preferred."
     )
     return_value_prompt: str = (
-        "Given the function below write a short description of"
+        "Given the function write a short description of"
         " a return value.\nFunction:\n\n{code}\n\nThe description "
         "should a few words long. Assume that your completion starts from "
         ":return: so don't include it."
     )
     parameter_prompt: str = (
-        "Given the function below write a short "
+        "Given the function write a short "
         "description of parameter {parameter}.\nFunction:\n\n{code}\n\nThe "
         "description should be up to one sentence long. Assume that "
         "your completions starts from :param {parameter}: so don't "
