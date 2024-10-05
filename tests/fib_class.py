@@ -3,11 +3,6 @@ from __future__ import annotations
 
 class FibCalculatorDoc:
     def fibonacci_doc(n: int) -> int:
-        """
-        Documentation
-        :param n:
-        :return:
-        """
         if n <= 0:
             raise ValueError("The input must be a positive integer.")
         elif n == 1:

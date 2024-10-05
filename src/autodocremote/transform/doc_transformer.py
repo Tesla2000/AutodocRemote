@@ -3,16 +3,35 @@ from __future__ import annotations
 from collections import defaultdict
 
 from libcst import ClassDef
+from libcst import Else
+from libcst import ExceptHandler
 from libcst import Expr
+from libcst import Finally
+from libcst import For
 from libcst import FunctionDef
+from libcst import If
 from libcst import IndentedBlock
 from libcst import Module
 from libcst import SimpleStatementLine
 from libcst import SimpleString
+from libcst import Try
+from libcst import With
 
 from ..config import Config
 from ..document.docstring_generator import DocstringGenerator
 from .transformer import Transformer
+
+indented_children = (
+    ClassDef,
+    FunctionDef,
+    If,
+    For,
+    Try,
+    With,
+    ExceptHandler,
+    Else,
+    Finally,
+)
 
 
 class DocTransformer(Transformer):
@@ -75,7 +94,10 @@ class DocTransformer(Transformer):
         :return: A dictionary mapping child nodes to their indentation levels.
         """
         for child in node.body:
-            if not isinstance(child, (IndentedBlock, ClassDef, FunctionDef)):
+            if not isinstance(child, indented_children):
                 continue
             self.indentation_levels[child] = self.indentation_levels[node] + 1
+            self.indentation_levels[child.body] = (
+                self.indentation_levels[node] + 1
+            )
         super().visit_IndentedBlock_body(node)

@@ -3,9 +3,13 @@ from __future__ import annotations
 
 def fibonacci_doc(n: int) -> int:
     """
-    Documentation
-    :param n:
-    :return:
+    The `fibonacci_doc` function computes the n-th Fibonacci number, where the
+    sequence starts with 0 and 1 for the first two numbers. It raises a
+    ValueError for non-positive integer inputs and returns the corresponding
+    Fibonacci number for valid positive integers.
+    :param n: A positive integer representing the position in the Fibonacci
+    sequence for which the corresponding Fibonacci number is to be calculated.
+    :return: The nth Fibonacci number.
     """
     if n <= 0:
         raise ValueError("The input must be a positive integer.")
