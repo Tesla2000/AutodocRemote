@@ -19,7 +19,8 @@ from libcst import With
 
 from ..config import Config
 from ..document.function_docstring_generator import FunctionDocstringGenerator
-from .transformer import Transformer
+from .class_code_extractor import ClassCodeExtractor
+from .class_structure_extractor import ClassStructureExtractor
 
 indented_children = (
     ClassDef,
@@ -34,7 +35,7 @@ indented_children = (
 )
 
 
-class DocTransformer(Transformer):
+class DocTransformer(ClassStructureExtractor):
     def __init__(self, module: Module, config: Config):
         """
         The `__init__` function initializes an instance of a class by calling
@@ -49,9 +50,11 @@ class DocTransformer(Transformer):
         configuration.
         :return: A dictionary with default indentation levels set to 1.
         """
-        super().__init__(module, config)
+        super().__init__(module)
+        self.config = config
         self.indentation_levels = defaultdict(lambda: 1)
         self.function_parents = {}
+        self.class_code_extractor = ClassCodeExtractor()
 
     def leave_FunctionDef(
         self, original_node: "FunctionDef", updated_node: "FunctionDef"
@@ -85,10 +88,17 @@ class DocTransformer(Transformer):
         return self._set_path_attrs(updated_node, ["body"], body=body)
 
     def visit_ClassDef_body(self, node: "ClassDef") -> None:
+        extracted_class = self.class_code_extractor.extract(node)
+        self.class_code_extractor.defined_classes[node.name.value] = (
+            extracted_class
+        )
         for child in node.body.body:
             if not isinstance(child, FunctionDef):
                 continue
-            self.function_parents[child] = Module(body=[node]).code.strip()
+            for method in node.body.body:
+                if not isinstance(child, FunctionDef):
+                    continue
+                self.function_parents[method] = extracted_class
         super().visit_ClassDef_body(node)
 
     def visit_IndentedBlock_body(self, node: "IndentedBlock") -> None:

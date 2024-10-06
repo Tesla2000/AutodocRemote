@@ -32,7 +32,10 @@ def generate_descriptions(
     :return: A tuple containing a summary, parameter descriptions, and a return
     value description.
     """
-    class_code = class_code and f"\n\nClass code:{class_code.strip()}"
+    class_code = (
+        class_code
+        and f"\n\nClass code and parent class structure:\n{class_code.strip()}"
+    )
     params = get_supported_openai_params(model=config.llm)
     if "response_format" in params:
         simplify = (

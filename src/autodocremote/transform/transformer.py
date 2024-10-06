@@ -5,25 +5,20 @@ from typing import Sequence
 import libcst as cst
 from libcst import Module
 
-from ..config import Config
-
 
 class Transformer(cst.CSTTransformer):
 
-    def __init__(self, module: Module, config: Config):
+    def __init__(self, module: Module):
         """
         The `__init__` function initializes an instance of a class by accepting
         a `Module` and a `Config` object, storing them as instance attributes.
         It also calls the initializer of its superclass to ensure proper setup.
         :param module: An instance of the Module class that represents a
         specific component or layer in a neural network architecture.
-        :param config: An instance of the Config class that contains
-        configuration settings for the module.
         :return: An instance of the class initialized with the provided module
         and configuration.
         """
         super().__init__()
-        self.config = config
         self.module = module
 
     def _get_path_attrs(self, elem, attrs: Sequence[str]):
