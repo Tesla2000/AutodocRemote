@@ -8,6 +8,7 @@ import libcst as cst
 from autodocremote.transform.class_structure_extractor import (
     ClassStructureExtractor,
 )
+from libcst import Attribute
 from libcst import ClassDef
 from libcst import Module
 
@@ -33,11 +34,17 @@ class ClassCodeExtractor:
         if class_name not in self.imported_elements:
             return
         class_module = self.imported_elements[class_name].module
+
+        def get_name(module: Attribute) -> str:
+            while hasattr(module, "value"):
+                module = module.value
+            return module
+
         if isinstance(class_module.value, str):
             from_string = class_module.value
         else:
             from_string = os.path.join(
-                class_module.value.value, class_module.attr.value
+                get_name(class_module), class_module.attr.value
             )
         current_working_directory = os.getcwd()
         parent_path = Path(
