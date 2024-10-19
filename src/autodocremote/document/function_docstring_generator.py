@@ -8,6 +8,7 @@ from libcst import FunctionDef
 from libcst import Module
 
 from ..config import Config
+from .docstring_parameter_extractors import DocstringParametersExtractor
 from .docstring_style.docstring_style import DocstringStyle
 from .generate_descriptions import generate_descriptions
 
@@ -71,14 +72,8 @@ class FunctionDocstringGenerator:
         tab = self.indentation_length * " "
         self.doc = self.original_node.get_docstring()
         if self.doc:
-            self.actual_parameters = dict(
-                (
-                    (partition := param.partition(":"))[0],
-                    f"{tab}:param {partition[0]}:{partition[2]}",
-                )
-                for param in self.doc.rpartition(":return:")[0].split(
-                    ":param "
-                )[1:]
+            self.actual_parameters = DocstringParametersExtractor.extract_all(
+                self.doc, tab
             )
         else:
             self.actual_parameters = {}

@@ -24,7 +24,7 @@ class PlainStyle(DocstringStyle):
             parameters, returns, missing_parameters
         )
         summary, parameters, result = (
-            self._split_line_summary(summary),
+            self._split_line(summary),
             tuple(map(self._split_line, parameters)),
             self._split_line(result),
         )

@@ -3,11 +3,11 @@ from __future__ import annotations
 
 def fibonacci_doc(n: int) -> int:
     """
-    Calculates the n-th Fibonacci number, where the sequence starts with 0 and
+    Calculates the nth Fibonacci number, where the sequence starts with 0 and
     1.
     :param n: The position in the Fibonacci sequence to retrieve, must be a
     positive integer.
-    :return: The n-th Fibonacci number.
+    :return: The nth Fibonacci number.
     """
     if n <= 0:
         raise ValueError("The input must be a positive integer.")
@@ -22,7 +22,21 @@ def fibonacci_doc(n: int) -> int:
     return b
 
 
-def fibonacci(n, a: int = 0, b: int = 1) -> int:
+def fibonacci(n, a: int = 0, b: int = 1, c: int = 2) -> int:
+    """
+    Calculates the n-th Fibonacci number using an iterative approach with
+    customizable starting values.
+
+    Args:
+        n (object): The position in the Fibonacci sequence to retrieve, must be
+        a positive integer.
+        a (int): The first number in the Fibonacci sequence, default is 0.
+        b (int): The second number in the Fibonacci sequence, default is 1.
+        c (int): The index for the Fibonacci sequence, starting from 2.
+
+    Returns:
+        The n-th Fibonacci number.
+    """
     if n <= 0:
         raise ValueError("The input must be a positive integer.")
     elif n == 1:

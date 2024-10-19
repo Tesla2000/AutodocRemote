@@ -55,8 +55,11 @@ class GoogleStyle(DocstringStyle):
         parameters = dict(zip(missing_parameters, parameters))
         parameters.update(actual_parameters)
         tab = self.indentation_length * " "
-        param_lines = "".join(
-            parameters[parameter] for parameter in expected_parameters
+        param_lines = "\n".join(
+            ((self.indentation_length + self.tab_length) * " " + line.lstrip())
+            for line in "".join(
+                parameters[parameter] for parameter in expected_parameters
+            ).splitlines()
         )
 
         return (
@@ -64,6 +67,7 @@ class GoogleStyle(DocstringStyle):
                 summary + "\n" + tab + "Args:\n" if param_lines else summary,
                 param_lines,
             )
+            + "\n"
             + tab
             + f'Returns:\n{result}{tab}"""'
         )
