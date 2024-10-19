@@ -1,25 +1,31 @@
 from __future__ import annotations
 
-from functools import partial
+from itertools import filterfalse
 from typing import Sequence
+from typing import Type
 
 from libcst import FunctionDef
 from libcst import Module
 
 from ..config import Config
-from .conv2docstring_lines import conv2docstring_lines
+from .docstring_style.docstring_style import DocstringStyle
 from .generate_descriptions import generate_descriptions
-from .split_lines import split_lines
 
 
 class FunctionDocstringGenerator:
     actual_parameters: dict[str, str]
     missing_parameters: Sequence[str]
     indentation_length: int
-    expected_parameters: set[str]
+    expected_parameters: tuple[str, ...]
+    parameter_types: dict[str, str]
     doc: str
 
-    def __init__(self, original_node: FunctionDef, config: Config):
+    def __init__(
+        self,
+        original_node: FunctionDef,
+        config: Config,
+        docstring_style: Type[DocstringStyle],
+    ):
         """
         The `__init__` function initializes an instance by accepting an
         `original_node` of type `FunctionDef` and a `config` of type `Config`,
@@ -31,6 +37,7 @@ class FunctionDocstringGenerator:
         :return: An instance of the class initialized with the given function
         definition and configuration.
         """
+        self.docstring_style = docstring_style
         self.config = config
         self.original_node = original_node
 
@@ -47,9 +54,19 @@ class FunctionDocstringGenerator:
         :return: Returns `True` if there are missing parameters or if the
         docstring is absent; otherwise, returns `False`.
         """
-        self.expected_parameters = set(
-            param.name.value for param in self.original_node.params.params
-        ) - {"self"}
+        self.expected_parameters = tuple(
+            param.name.value
+            for param in self.original_node.params.params
+            if param.name.value != "self"
+        )
+        self.parameter_types = {
+            param.name.value: (
+                param.annotation and param.annotation.annotation.value
+            )
+            or "object"
+            for param in self.original_node.params.params
+            if param.name.value != "self"
+        }
         self.indentation_length = indentation_level * self.config.tab_length
         tab = self.indentation_length * " "
         self.doc = self.original_node.get_docstring()
@@ -68,7 +85,10 @@ class FunctionDocstringGenerator:
         if self.doc and not self.config.update_overwrite:
             return False
         self.missing_parameters = tuple(
-            self.expected_parameters - set(self.actual_parameters.keys())
+            filterfalse(
+                self.actual_parameters.keys().__contains__,
+                self.expected_parameters,
+            )
         )
         if not self.missing_parameters and self.doc:
             return False
@@ -88,23 +108,16 @@ class FunctionDocstringGenerator:
         summary, parameters, result = generate_descriptions(
             code, self.missing_parameters, self.config, class_code
         )
-        parameters, result = conv2docstring_lines(
-            parameters, result, self.missing_parameters
-        )
-        line_splitter = partial(
-            split_lines,
-            line_length=self.config.line_length,
-            indentation_length=self.indentation_length,
-        )
-        summary, parameters, result = (
-            line_splitter(summary),
-            tuple(map(line_splitter, parameters)),
-            line_splitter(result),
-        )
-        parameters = dict(zip(self.missing_parameters, parameters))
-        parameters.update(self.actual_parameters)
-        return '"""{}{}{}"""'.format(
-            "\n" + summary,
-            "".join(map(parameters.get, self.expected_parameters)),
-            result + self.indentation_length * " ",
+        return self.docstring_style(
+            self.indentation_length,
+            self.config.line_length,
+            self.config.tab_length,
+            parameter_types=self.parameter_types,
+        ).generate(
+            summary,
+            parameters,
+            result,
+            self.missing_parameters,
+            self.actual_parameters,
+            self.expected_parameters,
         )

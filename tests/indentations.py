@@ -211,18 +211,18 @@ if True:
 
         def fibonacci(n, a: int = 0, b: int = 1) -> int:
             """
-            The `fibonacci` function calculates the n-th Fibonacci number,
-            where the first two numbers in the sequence are defined as 0 and 1.
-            It raises a ValueError for non-positive integer inputs and uses an
-            iterative approach to compute the result for n greater than 2.
-            :param a: An integer representing the first number in the Fibonacci
-            sequence, initialized to 0 by default.
-            :param b: An integer representing the current Fibonacci number in
-            the sequence, initialized to 1 for the calculation.
-            :param n: A positive integer representing the position in the
-            Fibonacci sequence to retrieve, where the sequence starts with 0 at
-            position 1 and 1 at position 2.
-            :return: The nth Fibonacci number.
+            Calculates the nth Fibonacci number using an iterative approach.
+
+            Args:
+                n (object): The position in the Fibonacci sequence to
+                calculate, must be a positive integer.
+                a (int): The first number in the Fibonacci sequence, default is
+                0.
+                b (int): The second number in the Fibonacci sequence, default
+                is 1.
+
+            Returns:
+                The nth Fibonacci number.
             """
             if n <= 0:
                 raise ValueError("The input must be a positive integer.")

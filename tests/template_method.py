@@ -8,7 +8,7 @@ class Programmer(ABC):
     def live(self):
         """
         Continuously executes the sleep, eat, and code methods in an infinite
-        loop.
+        loop, simulating the daily routine of a programmer.
         :return: None
         """
         while True:

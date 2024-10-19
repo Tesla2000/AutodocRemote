@@ -18,6 +18,9 @@ from libcst import Try
 from libcst import With
 
 from ..config import Config
+from ..document.docstring_style.docstring_style_factory import (
+    DocstringStyleFactory,
+)
 from ..document.function_docstring_generator import FunctionDocstringGenerator
 from .class_code_extractor import ClassCodeExtractor
 from .class_structure_extractor import ClassStructureExtractor
@@ -74,9 +77,14 @@ class DocTransformer(ClassStructureExtractor):
         docstring, or the original if invalid.
         """
         indentation_level = self.indentation_levels[original_node]
-        generator = FunctionDocstringGenerator(original_node, self.config)
+        docstring_type = DocstringStyleFactory.create(
+            self.config.docstring_style
+        )
+        generator = FunctionDocstringGenerator(
+            original_node, self.config, docstring_type
+        )
         if not generator.is_valid(indentation_level):
-            return original_node
+            return updated_node
         result_doc = generator.generate(
             self.function_parents.get(original_node, "")
         )

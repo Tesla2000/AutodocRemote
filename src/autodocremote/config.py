@@ -41,6 +41,7 @@ class Config(BaseModel):
         "include it."
     )
     update_overwrite: bool = True
+    docstring_style: str = "plain"
 
 
 def parse_arguments(config_class: Type[Config]):
