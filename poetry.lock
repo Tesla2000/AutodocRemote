@@ -1244,6 +1244,17 @@ files = [
 typing-extensions = ">=4.6.0,<4.7.0 || >4.7.0"
 
 [[package]]
+name = "pyment"
+version = "0.3.3"
+description = "Generate/convert automatically the docstrings from code signature"
+optional = false
+python-versions = "*"
+files = [
+    {file = "Pyment-0.3.3-py2.py3-none-any.whl", hash = "sha256:a0c6ec59d06d24aeec3eaecb22115d0dc95d09e14209b2df838381fdf47a78cc"},
+    {file = "Pyment-0.3.3.tar.gz", hash = "sha256:951a4c52d6791ccec55bc739811169eed69917d3874f5fe722866623a697f39d"},
+]
+
+[[package]]
 name = "python-dotenv"
 version = "1.0.1"
 description = "Read key-value pairs from a .env file and set them as environment variables"
@@ -1945,4 +1956,4 @@ type = ["pytest-mypy"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.9"
-content-hash = "7d8776967bd4d6dda9a4fc6ed44db781ccc7caa1396465a9554e248d336a3ef7"
+content-hash = "2e5eb1d4881ddf5d1484c99eb892de93c481447d41284833324f1e54f47d1287"

@@ -8,6 +8,7 @@ from pydantic import BaseModel
 from pydantic import Field
 
 from .custom_argument_parser import CustomArgumentParser
+from .document.docstring_style import DocstringStyle
 
 load_dotenv()
 
@@ -41,6 +42,7 @@ class Config(BaseModel):
         "include it."
     )
     update_overwrite: bool = True
+    docstring_style: DocstringStyle = DocstringStyle.REST
 
 
 def parse_arguments(config_class: Type[Config]):

@@ -6,6 +6,7 @@ from .config import Config
 from .config import create_config_with_args
 from .config import parse_arguments
 from .transform.modify_file import modify_file
+from .utlis.convert_code_style import convert_docstring_style
 
 
 def main() -> int:
@@ -27,4 +28,5 @@ def main() -> int:
             filepath,
             config=config,
         )
+        fail |= convert_docstring_style(filepath, config.docstring_style)
     return fail
